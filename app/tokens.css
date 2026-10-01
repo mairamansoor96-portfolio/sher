@@ -1,0 +1,47 @@
+/*
+ * Design tokens — the ONLY place colours, type sizes, spacing and radii are
+ * defined. Provisional, deliberately plain foundation (SPEC.md, "Provisional
+ * visual foundation"): the final theme replaces these values, not components.
+ *
+ * Tailwind v4 turns each token into utilities, e.g. --color-ink -> text-ink,
+ * --text-couplet -> text-couplet, --leading-nastaliq -> leading-nastaliq.
+ * Sizes are in rem so they scale with the reader's text size.
+ */
+@theme {
+  /* Palette: near-white background, near-black ink, one muted accent. */
+  --color-paper: #fafaf8;
+  --color-ink: #1c1c1a;
+  --color-ink-muted: #5c5c57; /* AA on paper (≈6.6:1) */
+  --color-accent: #4f6b6a;    /* AA on paper (≈5.6:1) */
+  --color-rule: #e4e4df;
+
+  /* Fonts (CSS variables are set by next/font in app/layout.tsx). */
+  --font-urdu: var(--font-noto-nastaliq-urdu), serif;
+  --font-ui: var(--font-atkinson-hyperlegible), system-ui, sans-serif;
+  --font-sans: var(--font-ui);
+
+  /* Type sizes */
+  --text-couplet: 2.125rem;       /* 34px — couplet on Today */
+  --text-couplet-list: 1.625rem;  /* 26px — couplet in lists */
+  --text-ui-sm: 0.875rem;         /* 14px */
+  --text-ui: 1rem;                /* 16px */
+  --text-ui-lg: 1.25rem;          /* 20px */
+  --text-poet-ur: 1.25rem;        /* 20px — poet name in Nastaliq */
+
+  /* Line heights. Nastaliq needs at least 2.2 so dots and stacks never clip. */
+  --leading-nastaliq: 2.2;
+  --leading-ui: 1.5;
+
+  /* Spacing */
+  --spacing-gutter: 1rem;         /* page side padding */
+  --spacing-couplet-pad: 2rem;    /* breathing room above/below couplets */
+  --spacing-section: 3rem;
+  --spacing-touch: 3rem;          /* 48px minimum touch target */
+
+  /* Layout */
+  --container-reading: 40rem;
+
+  /* Radii */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+}

@@ -1,0 +1,85 @@
+[
+  {
+    "id": "ghalib-hazaaron-khwahishen",
+    "poet": "ghalib",
+    "lines": ["ہزاروں خواہشیں ایسی کہ ہر خواہش پہ دم نکلے", "بہت نکلے مرے ارمان لیکن پھر بھی کم نکلے"],
+    "roman": ["Hazaaron khwahishen aisi ke har khwahish pe dam nikle", "Bahut nikle mere armaan lekin phir bhi kam nikle"],
+    "meaningEn": "I have thousands of desires, each one worth dying for. Many of my wishes came true, and still it feels like too few.",
+    "whyItLands": "Ghalib uses the same verb, nikle, in both lines. First it is breath leaving the body for a single wish; then it is wishes coming true. Longing and fulfilment share one word, and neither is ever enough.",
+    "glossary": [
+      { "word": "خواہشیں", "roman": "khwahishen", "meaning": "desires, wishes" },
+      { "word": "دم", "roman": "dam", "meaning": "breath; here, life itself" },
+      { "word": "ارمان", "roman": "armaan", "meaning": "cherished hopes, deep wishes" }
+    ],
+    "moments": ["longing", "life-is-short"],
+    "source": { "work": "Divan-e-Ghalib" },
+    "attribution": "certain",
+    "status": "draft"
+  },
+  {
+    "id": "ghalib-dil-e-nadaan",
+    "poet": "ghalib",
+    "lines": ["دل ناداں تجھے ہوا کیا ہے", "آخر اس درد کی دوا کیا ہے"],
+    "roman": ["Dil-e-nadaan tujhe hua kya hai", "Aakhir is dard ki dawa kya hai"],
+    "meaningEn": "My foolish heart, what has happened to you? What, after all, is the cure for this pain?",
+    "whyItLands": "Ghalib speaks to his own heart as if it were a worried friend, which turns a private ache into something anyone can say out loud.",
+    "glossary": [
+      { "word": "ناداں", "roman": "nadaan", "meaning": "naive, innocent, foolish" },
+      { "word": "دوا", "roman": "dawa", "meaning": "medicine, cure" }
+    ],
+    "moments": ["heartbreak", "longing"],
+    "source": { "work": "Divan-e-Ghalib" },
+    "attribution": "certain",
+    "status": "draft"
+  },
+  {
+    "id": "ghalib-koi-ummeed",
+    "poet": "ghalib",
+    "lines": ["کوئی امید بر نہیں آتی", "کوئی صورت نظر نہیں آتی"],
+    "roman": ["Koi ummeed bar nahin aati", "Koi soorat nazar nahin aati"],
+    "meaningEn": "No hope ever comes true. No way forward can be seen.",
+    "whyItLands": "Soorat means both a way out and a face, so the second line can also mean that no beloved face appears. Despair and loneliness share the line.",
+    "glossary": [
+      { "word": "بر", "roman": "bar", "meaning": "in bar aana: to be fulfilled" },
+      { "word": "صورت", "roman": "soorat", "meaning": "a way, a possibility; also a face" }
+    ],
+    "moments": ["night", "longing"],
+    "source": { "work": "Divan-e-Ghalib" },
+    "attribution": "certain",
+    "status": "draft"
+  },
+  {
+    "id": "dagh-tumhare-khat",
+    "poet": "dagh",
+    "lines": ["تمہارے خط میں نیا اک سلام کس کا تھا", "نہ تھا رقیب تو آخر وہ نام کس کا تھا"],
+    "roman": ["Tumhare khat mein naya ik salaam kis ka tha", "Na tha raqeeb to aakhir woh naam kis ka tha"],
+    "meaningEn": "Your letter carried a new greeting from someone. If it wasn't a rival, then whose name was that?",
+    "whyItLands": "Playful jealousy. One extra greeting at the end of a letter is enough to start an investigation.",
+    "glossary": [
+      { "word": "خط", "roman": "khat", "meaning": "letter" },
+      { "word": "سلام", "roman": "salaam", "meaning": "greeting" },
+      { "word": "رقیب", "roman": "raqeeb", "meaning": "a rival in love" }
+    ],
+    "moments": ["humour", "missing-someone"],
+    "source": { "work": "Kulliyat-e-Dagh" },
+    "attribution": "certain",
+    "status": "draft"
+  },
+  {
+    "id": "zafar-lagta-nahin-hai-dil",
+    "poet": "zafar",
+    "lines": ["لگتا نہیں ہے دل مرا اجڑے دیار میں", "کس کی بنی ہے عالم ناپائیدار میں"],
+    "roman": ["Lagta nahin hai dil mera ujre dayaar mein", "Kis ki bani hai aalam-e-napaedaar mein"],
+    "meaningEn": "My heart can't settle in this ruined land. Who has ever made a lasting home in a world that doesn't last?",
+    "whyItLands": "Read as the voice of the last Mughal emperor in exile, it is about losing a city and a world. Read on its own, it fits anyone far from a place they loved.",
+    "glossary": [
+      { "word": "دیار", "roman": "dayaar", "meaning": "land, homeland, dwelling place" },
+      { "word": "ناپائیدار", "roman": "napaedaar", "meaning": "impermanent, passing" }
+    ],
+    "moments": ["life-is-short", "missing-someone"],
+    "source": { "work": "Attributed to Kulliyat-e-Zafar" },
+    "attribution": "disputed",
+    "attributionNote": "Widely attributed to Bahadur Shah Zafar, but some scholars question whether he wrote this ghazal.",
+    "status": "draft"
+  }
+]

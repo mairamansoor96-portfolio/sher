@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toggleSaved, useIsSaved } from "@/lib/bayaz-store";
+import { useT } from "@/lib/i18n";
 import { shareSher } from "@/lib/share";
 
 const BUTTON =
@@ -11,6 +12,7 @@ const BUTTON =
 /** Save to bayaz (one tap, toggles), Make a poster and Share link, with a brief confirmation. */
 export function SherActions({ id, title }: { id: string; title: string }) {
   const saved = useIsSaved(id);
+  const t = useT();
   const [status, setStatus] = useState("");
 
   useEffect(() => {
@@ -27,18 +29,18 @@ export function SherActions({ id, title }: { id: string; title: string }) {
           aria-pressed={saved}
           onClick={() => {
             toggleSaved(id);
-            setStatus(saved ? "Removed from your bayaz" : "Saved to your bayaz");
+            setStatus(saved ? t.actions.removed : t.actions.saved);
           }}
           className={BUTTON}
         >
           {saved && <span aria-hidden="true">✓ </span>}
-          Save to bayaz
+          {t.actions.save}
         </button>
-        <button type="button" onClick={async () => setStatus(await shareSher(id, title))} className={BUTTON}>
-          Share link
+        <button type="button" onClick={async () => setStatus(await shareSher(id, title, t))} className={BUTTON}>
+          {t.actions.share}
         </button>
         <Link href={`/sher/${id}/poster`} className={`${BUTTON} inline-flex items-center`}>
-          Make a poster
+          {t.actions.poster}
         </Link>
       </div>
       <p role="status" className="mt-2 min-h-6 break-all text-ui-sm text-ink-muted">

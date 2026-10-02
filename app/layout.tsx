@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Atkinson_Hyperlegible, Noto_Nastaliq_Urdu } from "next/font/google";
+import { SiteHeader } from "@/components/SiteHeader";
 import { TabBar } from "@/components/TabBar";
 import "./globals.css";
 
@@ -25,14 +25,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${nastaliq.variable} ${atkinson.variable} antialiased`}>
+    <html lang="en" dir="ltr" className={`${nastaliq.variable} ${atkinson.variable} antialiased`}>
       <body className="min-h-dvh">
         <div className="mx-auto max-w-reading px-gutter pt-8 pb-tabbar">
-          <header className="mb-section">
-            <Link href="/" className="inline-flex min-h-touch items-center text-ui-lg font-bold">
-              Sher
-            </Link>
-          </header>
+          <SiteHeader />
           <main>{children}</main>
         </div>
         <TabBar />

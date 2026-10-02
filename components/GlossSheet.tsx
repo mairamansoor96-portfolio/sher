@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef } from "react";
+import { useT } from "@/lib/i18n";
 import type { Gloss } from "@/lib/types";
 
 interface Props {
@@ -17,6 +18,7 @@ interface Props {
 export function GlossSheet({ gloss, onClose }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
+  const t = useT();
 
   useEffect(() => {
     const dialog = ref.current;
@@ -45,13 +47,15 @@ export function GlossSheet({ gloss, onClose }: Props) {
         <p lang="ur-Latn" className="text-ui-lg font-bold">
           {gloss.roman}
         </p>
-        <p className="mt-2">{gloss.meaning}</p>
+        <p lang="en" dir="ltr" className="mt-2">
+          {gloss.meaning}
+        </p>
         <form method="dialog" className="mt-6">
           <button
             type="submit"
             className="min-h-touch min-w-touch rounded-md border border-ink px-6 focus-visible:outline-2 focus-visible:outline-accent"
           >
-            Close
+            {t.gloss.close}
           </button>
         </form>
       </div>

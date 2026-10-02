@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Couplet } from "@/components/Couplet";
 import { GlossSheet } from "@/components/GlossSheet";
 import { SherActions } from "@/components/SherActions";
+import { useT } from "@/lib/i18n";
 import { setLayer, useLayers, type Layer } from "@/lib/layers";
 import type { Gloss, Poet, Sher } from "@/lib/types";
 
@@ -19,13 +20,14 @@ interface Props {
  */
 export function SherView({ sher, poet }: Props) {
   const layers = useLayers();
+  const t = useT();
   const [open, setOpen] = useState<{ gloss: Gloss; trigger: HTMLElement } | null>(null);
 
   const controls: { layer: Layer; label: string; show: boolean }[] = [
-    { layer: "roman", label: "Roman", show: true },
-    { layer: "words", label: "Words", show: sher.glossary.length > 0 },
-    { layer: "meaning", label: "Meaning", show: true },
-    { layer: "why", label: "Why it lands", show: Boolean(sher.whyItLands) },
+    { layer: "roman", label: t.layers.roman, show: true },
+    { layer: "words", label: t.layers.words, show: sher.glossary.length > 0 },
+    { layer: "meaning", label: t.layers.meaning, show: true },
+    { layer: "why", label: t.layers.why, show: Boolean(sher.whyItLands) },
   ];
 
   const closeSheet = () => {
@@ -47,13 +49,15 @@ export function SherView({ sher, poet }: Props) {
           <span lang="ur" dir="rtl" className="block font-urdu text-poet-ur leading-nastaliq">
             {poet.nameUr}
           </span>
-          <span className="block text-ui text-ink-muted">{poet.nameEn}</span>
+          <span lang="en" dir="ltr" className="block text-ui text-ink-muted">
+            {poet.nameEn}
+          </span>
         </p>
       )}
 
       <div
         role="group"
-        aria-label="Understanding layers"
+        aria-label={t.layers.group}
         className="mt-section flex flex-wrap justify-center gap-2"
       >
         {controls
@@ -72,9 +76,11 @@ export function SherView({ sher, poet }: Props) {
       </div>
 
       {layers.meaning && (
-        <section aria-label="Meaning" className="reveal mt-section">
-          <h3 className="text-ui-sm font-bold text-ink-muted">Meaning</h3>
-          <p className="mt-1 text-ui-lg">{sher.meaningEn}</p>
+        <section aria-label={t.layers.meaning} className="reveal mt-section">
+          <h3 className="text-ui-sm font-bold text-ink-muted">{t.layers.meaning}</h3>
+          <p lang="en" dir="ltr" className="mt-1 text-ui-lg">
+            {sher.meaningEn}
+          </p>
           {sher.meaningUr && (
             <p lang="ur" dir="rtl" className="mt-2 font-urdu text-poet-ur leading-nastaliq">
               {sher.meaningUr}
@@ -84,9 +90,11 @@ export function SherView({ sher, poet }: Props) {
       )}
 
       {layers.why && sher.whyItLands && (
-        <section aria-label="Why it lands" className="reveal mt-section">
-          <h3 className="text-ui-sm font-bold text-ink-muted">Why it lands</h3>
-          <p className="mt-1">{sher.whyItLands}</p>
+        <section aria-label={t.layers.why} className="reveal mt-section">
+          <h3 className="text-ui-sm font-bold text-ink-muted">{t.layers.why}</h3>
+          <p lang="en" dir="ltr" className="mt-1">
+            {sher.whyItLands}
+          </p>
         </section>
       )}
 
@@ -96,13 +104,17 @@ export function SherView({ sher, poet }: Props) {
 
       <footer className="mt-section border-t border-rule pt-4 text-ui-sm text-ink-muted">
         <p>
-          Source: <cite>{sher.source.work}</cite>
-          {sher.source.edition && `, ${sher.source.edition}`}
-          {sher.source.page && `, p. ${sher.source.page}`}
+          {t.sher.source}{" "}
+          <span lang="en" dir="ltr">
+            <cite>{sher.source.work}</cite>
+            {sher.source.edition && `, ${sher.source.edition}`}
+            {sher.source.page && `, p. ${sher.source.page}`}
+          </span>
         </p>
         {sher.attribution === "disputed" && (
           <p className="mt-1">
-            <strong className="text-ink">Disputed attribution.</strong> {sher.attributionNote}
+            <strong className="text-ink">{t.sher.disputed}</strong>{" "}
+            <span lang="en" dir="ltr">{sher.attributionNote}</span>
           </p>
         )}
       </footer>

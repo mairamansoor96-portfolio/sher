@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SherListItem } from "@/components/SherListItem";
+import { T } from "@/components/T";
 import { getPoet, moments, PLACEHOLDER_PARAM, shersForMoment } from "@/lib/content";
 
 export const dynamicParams = false;
@@ -28,11 +29,13 @@ export default async function MomentPage({ params }: PageProps<"/moments/[moment
     <>
       <Link
         href="/moments"
-        className="inline-flex min-h-touch items-center text-ui-sm text-ink-muted underline underline-offset-4"
+        className="inline-flex min-h-touch min-w-touch items-center text-ui-sm text-ink-muted underline underline-offset-4"
       >
-        All moments
+        <T k="moments.all" />
       </Link>
-      <h1 className="text-ui-lg font-bold">{moment.label}</h1>
+      <h1 className="text-ui-lg font-bold">
+        <T k={`moment.${moment.key}`} />
+      </h1>
       <ul className="mt-6 flex flex-col gap-4">
         {shersForMoment(moment.key).map((sher) => (
           <SherListItem key={sher.id} sher={sher} poet={getPoet(sher.poet)} />

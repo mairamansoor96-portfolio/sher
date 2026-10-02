@@ -19,8 +19,17 @@ export function SherListItem({ sher, poet, children }: Props) {
         className="block rounded-md border border-rule px-gutter pb-4 hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         <Couplet sher={sher} size="list" roman />
-        <p className="text-ui">{firstSentence(sher.meaningEn)}</p>
-        {poet && <p className="mt-1 text-ui-sm text-ink-muted">{poet.nameEn}</p>}
+        <p lang="en" dir="ltr" className="text-ui">
+          {firstSentence(sher.meaningEn)}
+        </p>
+        {poet && (
+          <p className="mt-1 text-ui-sm text-ink-muted">
+            <span lang="ur" dir="rtl" className="font-urdu leading-nastaliq">
+              {poet.nameUr}
+            </span>{" "}
+            · <span lang="en" dir="ltr">{poet.nameEn}</span>
+          </p>
+        )}
       </Link>
       {children}
     </li>

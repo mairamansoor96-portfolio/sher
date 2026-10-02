@@ -1,3 +1,4 @@
+import type { Lang } from "@/lib/i18n";
 import type { PosterColors, PosterFonts } from "@/lib/poster/canvas";
 import type { Poet, Sher } from "@/lib/types";
 
@@ -34,6 +35,7 @@ export interface PosterLayout {
  */
 export interface PosterStyle {
   id: string;
-  label: string;
+  /** Shown in the editor, in each interface language. */
+  label: Record<Lang, string>;
   render(ctx: CanvasRenderingContext2D, content: PosterContent): PosterLayout;
 }

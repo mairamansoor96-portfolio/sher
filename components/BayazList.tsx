@@ -4,15 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import { EmptyState } from "@/components/EmptyState";
 import { SherListItem } from "@/components/SherListItem";
 import type { BayazEntry } from "@/lib/bayaz";
+import { formatDate, useLang, useT } from "@/lib/i18n";
 import { restoreEntry, toggleSaved, useBayaz } from "@/lib/bayaz-store";
 import { useIsClient } from "@/lib/storage";
 import type { Poet, Sher } from "@/lib/types";
 
-const savedOn = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" });
-
 /** Saved couplets, newest first. Read from this device, so client-only. */
 export function BayazList({ shers, poets }: { shers: Sher[]; poets: Poet[] }) {
   const isClient = useIsClient();
+  const t = useT();
+  const lang = useLang();
   const entries = useBayaz();
   const [removed, setRemoved] = useState<BayazEntry | null>(null);
   const undoRef = useRef<HTMLButtonElement>(null);
@@ -35,7 +36,7 @@ export function BayazList({ shers, poets }: { shers: Sher[]; poets: Poet[] }) {
       <div role="status" className="mt-4 min-h-touch">
         {removed && (
           <p className="flex flex-wrap items-center gap-2 text-ui-sm text-ink-muted">
-            Removed from your bayaz.
+            {t.bayaz.removed}
             <button
               ref={undoRef}
               type="button"
@@ -45,24 +46,20 @@ export function BayazList({ shers, poets }: { shers: Sher[]; poets: Poet[] }) {
               }}
               className="min-h-touch px-2 text-ink underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-accent"
             >
-              Undo
+              {t.bayaz.undo}
             </button>
           </p>
         )}
       </div>
 
       {items.length === 0 ? (
-        <EmptyState title="Your bayaz is empty">
-          A bayaz is a personal notebook where lovers of poetry copy out the couplets they want to
-          keep. Tap “Save to bayaz” on any couplet and it will appear here. It stays on this device:
-          no account, nothing sent anywhere.
-        </EmptyState>
+        <EmptyState title={t.bayaz.emptyTitle}>{t.bayaz.emptyBody}</EmptyState>
       ) : (
         <ul className="flex flex-col gap-6">
           {items.map(({ entry, sher }) => (
             <SherListItem key={sher.id} sher={sher} poet={poets.find((p) => p.key === sher.poet)}>
               <div className="mt-1 flex items-center justify-between gap-2 text-ui-sm text-ink-muted">
-                <span>Saved {savedOn.format(new Date(entry.savedAt))}</span>
+                <span>{t.bayaz.savedOn(formatDate(new Date(entry.savedAt), lang))}</span>
                 <button
                   type="button"
                   aria-pressed="true"
@@ -73,9 +70,10 @@ export function BayazList({ shers, poets }: { shers: Sher[]; poets: Poet[] }) {
                   }}
                   className="min-h-touch rounded-md border border-ink bg-ink px-4 text-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
-                  <span aria-hidden="true">✓ </span>Save to bayaz
+                  <span aria-hidden="true">✓ </span>
+                  {t.actions.save}
                 </button>
-                <span id={`saved-${sher.id}`} className="sr-only">
+                <span id={`saved-${sher.id}`} lang="ur-Latn" className="sr-only">
                   {sher.roman[0]}
                 </span>
               </div>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { getStyle, POSTER_STYLES } from "@/components/poster/styles";
+import { useLang, useT } from "@/lib/i18n";
 import { loadPosterFonts, readTheme } from "@/lib/poster/canvas";
 import { getSize, POSTER_SIZES } from "@/lib/poster/options";
 import { setPosterOption, usePosterOptions } from "@/lib/poster/prefs";
@@ -25,6 +26,9 @@ export function PosterMaker({ sher, poet }: { sher: Sher; poet?: Poet }) {
   const [fonts, setFonts] = useState<"loading" | "ready" | "failed">("loading");
   const [status, setStatus] = useState("");
   const isClient = useIsClient();
+  const t = useT();
+  const lang = useLang();
+  const [sizeLabel] = t.poster.sizes[size.id];
 
   useEffect(() => {
     let alive = true;
@@ -80,7 +84,7 @@ export function PosterMaker({ sher, poet }: { sher: Sher; poet?: Poet }) {
         url: new URL(`/sher/${sher.id}`, window.location.origin).href,
       });
     } catch (e) {
-      if ((e as DOMException).name !== "AbortError") setStatus("Sharing didn’t work. Try Download instead.");
+      if ((e as DOMException).name !== "AbortError") setStatus(t.poster.shareFailed);
     }
   }
 
@@ -93,38 +97,39 @@ export function PosterMaker({ sher, poet }: { sher: Sher; poet?: Poet }) {
     a.download = fileName;
     a.click();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    setStatus(`Saved ${fileName}`);
+    setStatus(t.poster.savedFile(fileName));
   }
 
-  const parts = [options.roman && "Roman", options.meaning && "English meaning"].filter(Boolean);
+  const extras = [options.roman && t.poster.roman, options.meaning && t.poster.meaning].filter(
+    (x): x is string => Boolean(x),
+  );
+  const poetName = (lang === "ur" ? poet?.nameUr : poet?.nameEn) ?? "";
 
   return (
     <div className="flex flex-col gap-section">
       <div className="text-center">
         {fonts === "failed" ? (
           <p role="alert" className="py-section text-ink">
-            The poster fonts couldn’t load, so the poster can’t be drawn properly. Check your
-            connection and reload.
+            {t.poster.fontsFailed}
           </p>
         ) : (
           <canvas
             ref={canvasRef}
             role="img"
-            aria-label={`Poster preview, ${size.label} ${size.width} by ${size.height}: the couplet in Urdu${
-              parts.length ? ` with ${parts.join(" and ")}` : ""
-            }, credited to ${poet?.nameEn ?? "the poet"}.`}
+            aria-label={t.poster.preview(sizeLabel, size.width, size.height, extras, poetName)}
             width={size.width}
             height={size.height}
             className="mx-auto block h-auto w-auto max-w-full border border-rule"
             style={{ aspectRatio: `${size.width} / ${size.height}`, maxHeight: "var(--poster-preview-max-h)" }}
           />
         )}
-        {fonts === "loading" && <p className="mt-2 text-ui-sm text-ink-muted">Loading fonts…</p>}
+        {fonts === "loading" && <p className="mt-2 text-ui-sm text-ink-muted">{t.poster.loadingFonts}</p>}
       </div>
 
       <fieldset>
-        <legend className="mb-2 text-ui font-bold">Size</legend>
-        <div className="grid grid-cols-2 gap-2">
+        <legend className="mb-2 text-ui font-bold">{t.poster.size}</legend>
+        {/* Two columns when there's room; one at large text sizes. */}
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,12rem),1fr))] gap-2">
           {POSTER_SIZES.map((s) => (
             <label key={s.id} className={CHOICE}>
               <input
@@ -136,9 +141,12 @@ export function PosterMaker({ sher, poet }: { sher: Sher; poet?: Poet }) {
                 className="size-5 shrink-0 accent-ink"
               />
               <span className="flex flex-col py-2 leading-tight">
-                <span>{s.label}</span>
+                <span>{t.poster.sizes[s.id][0]}</span>
                 <span className="text-ui-sm text-ink-muted">
-                  {s.hint} · {s.width}×{s.height}
+                  {t.poster.sizes[s.id][1]} ·{" "}
+                  <span dir="ltr">
+                    {s.width}×{s.height}
+                  </span>
                 </span>
               </span>
             </label>
@@ -147,8 +155,8 @@ export function PosterMaker({ sher, poet }: { sher: Sher; poet?: Poet }) {
       </fieldset>
 
       <fieldset>
-        <legend className="mb-2 text-ui font-bold">Style</legend>
-        <div className="grid grid-cols-2 gap-2">
+        <legend className="mb-2 text-ui font-bold">{t.poster.style}</legend>
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,12rem),1fr))] gap-2">
           {POSTER_STYLES.map((s) => (
             <label key={s.id} className={CHOICE}>
               <input
@@ -159,18 +167,18 @@ export function PosterMaker({ sher, poet }: { sher: Sher; poet?: Poet }) {
                 onChange={() => setPosterOption("style", s.id)}
                 className="size-5 shrink-0 accent-ink"
               />
-              {s.label}
+              {s.label[lang]}
             </label>
           ))}
         </div>
       </fieldset>
 
       <fieldset>
-        <legend className="mb-2 text-ui font-bold">Include</legend>
+        <legend className="mb-2 text-ui font-bold">{t.poster.include}</legend>
         <div className="flex flex-col gap-2">
           <label className={`${CHOICE} cursor-default`}>
             <input type="checkbox" checked disabled className="size-5 shrink-0 accent-ink" />
-            Urdu (always)
+            {t.poster.urduAlways}
           </label>
           <label className={CHOICE}>
             <input
@@ -179,7 +187,7 @@ export function PosterMaker({ sher, poet }: { sher: Sher; poet?: Poet }) {
               onChange={(e) => setPosterOption("roman", e.target.checked)}
               className="size-5 shrink-0 accent-ink"
             />
-            Roman
+            {t.poster.roman}
           </label>
           <label className={CHOICE}>
             <input
@@ -188,11 +196,11 @@ export function PosterMaker({ sher, poet }: { sher: Sher; poet?: Poet }) {
               onChange={(e) => setPosterOption("meaning", e.target.checked)}
               className="size-5 shrink-0 accent-ink"
             />
-            English meaning
+            {t.poster.meaning}
           </label>
         </div>
         <p className="mt-2 text-ui-sm text-ink-muted">
-          The poet’s name and the Sher mark are always included.
+          {t.poster.creditNote}
         </p>
       </fieldset>
 
@@ -200,11 +208,11 @@ export function PosterMaker({ sher, poet }: { sher: Sher; poet?: Poet }) {
         <div className="flex flex-wrap justify-center gap-2">
           {canShareFiles && (
             <button type="button" onClick={share} disabled={fonts !== "ready"} className={BUTTON}>
-              Share
+              {t.poster.share}
             </button>
           )}
           <button type="button" onClick={download} disabled={fonts !== "ready"} className={BUTTON}>
-            Download PNG
+            {t.poster.download}
           </button>
         </div>
         <p role="status" className="mt-2 min-h-6 text-ui-sm text-ink-muted">
@@ -214,7 +222,7 @@ export function PosterMaker({ sher, poet }: { sher: Sher; poet?: Poet }) {
           href={`/sher/${sher.id}`}
           className="inline-flex min-h-touch items-center text-ui-sm text-ink-muted underline underline-offset-4"
         >
-          Back to the couplet
+          {t.poster.back}
         </Link>
       </div>
     </div>

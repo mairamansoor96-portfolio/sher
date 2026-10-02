@@ -1,9 +1,11 @@
+import type { Dict } from "./i18n";
+
 /**
  * Shares a couplet's own URL (it holds only the id, never anything personal):
  * the Web Share API where available, else copy to clipboard. Returns a short
  * confirmation to announce, or "" when the reader cancelled.
  */
-export async function shareSher(id: string, title: string): Promise<string> {
+export async function shareSher(id: string, title: string, t: Dict): Promise<string> {
   const url = new URL(`/sher/${id}`, window.location.origin).href;
   if (navigator.share) {
     try {
@@ -15,8 +17,8 @@ export async function shareSher(id: string, title: string): Promise<string> {
   }
   try {
     await navigator.clipboard.writeText(url);
-    return "Link copied";
+    return t.actions.copied;
   } catch {
-    return `Copy this link: ${url}`;
+    return t.actions.copyThis(url);
   }
 }

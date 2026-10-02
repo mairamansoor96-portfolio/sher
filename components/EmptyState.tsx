@@ -1,4 +1,4 @@
-export function EmptyState({ title, children }: { title: string; children: React.ReactNode }) {
+export function EmptyState({ title, children }: { title: React.ReactNode; children: React.ReactNode }) {
   return (
     <section className="py-section text-center">
       <h2 className="text-ui-lg font-bold">{title}</h2>

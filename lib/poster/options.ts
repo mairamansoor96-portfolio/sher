@@ -1,10 +1,11 @@
 // Poster sizes and options (SPEC.md, "Poster maker"). Pure, no DOM.
 
 export const POSTER_SIZES = [
-  { id: "story", label: "Story", hint: "WhatsApp or Instagram", width: 1080, height: 1920 },
-  { id: "square", label: "Square", hint: "Post", width: 1080, height: 1080 },
-  { id: "portrait", label: "Portrait", hint: "Post", width: 1080, height: 1350 },
-  { id: "wallpaper", label: "Wallpaper", hint: "Phone", width: 1170, height: 2532 },
+  // Labels are interface text: see poster.sizes in lib/i18n.ts.
+  { id: "story", width: 1080, height: 1920 },
+  { id: "square", width: 1080, height: 1080 },
+  { id: "portrait", width: 1080, height: 1350 },
+  { id: "wallpaper", width: 1170, height: 2532 },
 ] as const;
 
 export type PosterSize = (typeof POSTER_SIZES)[number];

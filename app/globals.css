@@ -54,3 +54,14 @@ body {
     opacity: 0;
   }
 }
+
+/* Urdu interface: Nastaliq with its generous line height. English data
+   (meanings, bios) and Roman lines keep the Latin UI font. */
+html[lang="ur"] body {
+  font-family: var(--font-urdu);
+  line-height: var(--leading-nastaliq);
+}
+html[lang="ur"] :where([lang="en"], [lang="ur-Latn"]) {
+  font-family: var(--font-ui);
+  line-height: var(--leading-ui);
+}

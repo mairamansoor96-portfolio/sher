@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { DraftNote } from "@/components/DraftNote";
 import { SherView } from "@/components/SherView";
+import { T } from "@/components/T";
 import { getPoet, getSher, PLACEHOLDER_PARAM, shers } from "@/lib/content";
 
 export const dynamicParams = false;
@@ -26,7 +27,9 @@ export default async function SherPage({ params }: PageProps<"/sher/[id]">) {
   const poet = getPoet(sher.poet);
   return (
     <article>
-      <h1 className="sr-only">Couplet{poet ? ` by ${poet.nameEn}` : ""}</h1>
+      <h1 className="sr-only">
+        <T k="sher.coupletBy" args={[poet?.nameEn ?? "", poet?.nameUr ?? ""]} />
+      </h1>
       <SherView sher={sher} poet={poet} />
       <DraftNote sher={sher} />
     </article>

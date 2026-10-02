@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PosterMaker } from "@/components/poster/PosterMaker";
+import { T } from "@/components/T";
 import { getPoet, getSher, PLACEHOLDER_PARAM, shers } from "@/lib/content";
 
 export const dynamicParams = false;
@@ -16,7 +17,9 @@ export default async function PosterPage({ params }: PageProps<"/sher/[id]/poste
   if (!sher) notFound();
   return (
     <>
-      <h1 className="mb-6 text-ui-lg font-bold">Make a poster</h1>
+      <h1 className="mb-6 text-ui-lg font-bold">
+        <T k="poster.title" />
+      </h1>
       <PosterMaker sher={sher} poet={getPoet(sher.poet)} />
     </>
   );

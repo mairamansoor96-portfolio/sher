@@ -8,7 +8,7 @@ import type { Box, PosterContent, PosterStyle } from "./types";
  */
 export const plainStyle: PosterStyle = {
   id: "plain",
-  label: "Plain",
+  label: { en: "Plain", ur: "سادہ" },
   render(ctx, c) {
     const { width: W, height: H, colors } = c;
     const margin = Math.round(W * 0.09);

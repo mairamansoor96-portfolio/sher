@@ -107,16 +107,21 @@ export function Couplet({ sher, size = "today", roman = false, onGloss }: Props)
           ))}
       </div>
 
-      {/* Hidden measuring copy: natural widths at the base size. */}
-      <div
-        aria-hidden="true"
-        lang="ur"
-        dir="rtl"
-        className="invisible pointer-events-none absolute top-0 right-0 font-urdu leading-nastaliq whitespace-nowrap"
-        style={{ fontSize: baseSize }}
-      >
-        <span ref={measure0} className="block w-max">{sher.lines[0]}</span>
-        <span ref={measure1} className="block w-max">{sher.lines[1]}</span>
+      {/* Hidden measuring copy: natural widths at the base size. It is wider
+          than the box when the couplet must shrink, so its wrapper clips it to
+          keep it from making the page scroll (in an RTL page, overflow to the
+          left scrolls). Clipping never changes the measured widths, and this
+          copy is never seen, so the no-clipping rule for couplets holds. */}
+      <div aria-hidden="true" className="invisible pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          lang="ur"
+          dir="rtl"
+          className="absolute top-0 right-0 font-urdu leading-nastaliq whitespace-nowrap"
+          style={{ fontSize: baseSize }}
+        >
+          <span ref={measure0} className="block w-max">{sher.lines[0]}</span>
+          <span ref={measure1} className="block w-max">{sher.lines[1]}</span>
+        </div>
       </div>
     </div>
   );

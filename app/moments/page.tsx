@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EmptyState } from "@/components/EmptyState";
+import { T } from "@/components/T";
 import { moments, shersForMoment } from "@/lib/content";
 
 export const metadata: Metadata = { title: "Moments" };
@@ -8,15 +9,19 @@ export const metadata: Metadata = { title: "Moments" };
 export default function MomentsPage() {
   return (
     <>
-      <h1 className="text-ui-lg font-bold">Moments</h1>
-      <p className="mt-1 text-ink-muted">Words for a moment in your life.</p>
+      <h1 className="text-ui-lg font-bold">
+        <T k="moments.title" />
+      </h1>
+      <p className="mt-1 text-ink-muted">
+        <T k="moments.intro" />
+      </p>
       {moments.length === 0 ? (
-        <EmptyState title="Moments are on their way">
-          Couplets appear here once they have been checked against a printed edition.
+        <EmptyState title={<T k="moments.emptyTitle" />}>
+          <T k="moments.emptyBody" />
         </EmptyState>
       ) : (
-        <ul className="mt-section grid grid-cols-2 gap-2">
-          {moments.map(({ key, label }) => {
+        <ul className="mt-section grid grid-cols-[repeat(auto-fit,minmax(min(100%,10rem),1fr))] gap-2">
+          {moments.map(({ key }) => {
             const n = shersForMoment(key).length;
             return (
               <li key={key}>
@@ -24,9 +29,11 @@ export default function MomentsPage() {
                   href={`/moments/${key}`}
                   className="flex min-h-touch flex-col justify-center rounded-md border border-rule px-4 py-3 hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
-                  <span className="text-ui font-bold">{label}</span>
+                  <span className="text-ui font-bold">
+                    <T k={`moment.${key}`} />
+                  </span>
                   <span className="text-ui-sm text-ink-muted">
-                    {n} {n === 1 ? "couplet" : "couplets"}
+                    <T k="moments.count" args={[n]} />
                   </span>
                 </Link>
               </li>

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toggleSaved, useIsSaved } from "@/lib/bayaz-store";
 import { shareSher } from "@/lib/share";
@@ -7,7 +8,7 @@ import { shareSher } from "@/lib/share";
 const BUTTON =
   "min-h-touch rounded-md border border-ink px-4 text-ui aria-pressed:bg-ink aria-pressed:text-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
-/** Save to bayaz (one tap, toggles) and Share link, with a brief confirmation. */
+/** Save to bayaz (one tap, toggles), Make a poster and Share link, with a brief confirmation. */
 export function SherActions({ id, title }: { id: string; title: string }) {
   const saved = useIsSaved(id);
   const [status, setStatus] = useState("");
@@ -36,6 +37,9 @@ export function SherActions({ id, title }: { id: string; title: string }) {
         <button type="button" onClick={async () => setStatus(await shareSher(id, title))} className={BUTTON}>
           Share link
         </button>
+        <Link href={`/sher/${id}/poster`} className={`${BUTTON} inline-flex items-center`}>
+          Make a poster
+        </Link>
       </div>
       <p role="status" className="mt-2 min-h-6 break-all text-ui-sm text-ink-muted">
         {status}

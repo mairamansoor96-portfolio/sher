@@ -51,4 +51,5 @@
 :root {
   --gloss-underline-offset: 0.45em;
   --gloss-underline-thickness: 0.06em;
+  --poster-preview-max-h: 70vh;
 }

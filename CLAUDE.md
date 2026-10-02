@@ -51,7 +51,8 @@ Commands: `npm run dev`, `npm run build`, `npm run lint`, `npm test`, `npx tsc -
 - Couplets are 34px on Today and 26px in lists (rem tokens), with **line height ≥ 2.2**, generous vertical padding, and **no `overflow: hidden`** on couplet containers.
 - **Balancing rule** (milestone 2): set both misras to the width of the wider one by widening word spaces only (`text-align: justify` plus `text-align-last: justify`). **Never use `letter-spacing` on Urdu.** If the wider line doesn't fit, shrink both lines together. If the shorter line would need more than ~40% extra space, leave it natural and centred.
 - Roman lines sit under their Urdu line, left-aligned to the same width, smaller, and never stretched.
-- Posters follow the same rule, wait for `document.fonts.load()` and measure real glyph bounds.
+- Posters follow the same rule, wait for `document.fonts.load()` and measure real glyph bounds. Nastaliq ink can overhang the line box (the stroke of ک by about ⅓ em), so `fitCouplet` fits and centres the ink. Load and draw only the real web font family, never next/font's fallback (`local("Arial")`, missing on many phones).
+- A new poster style is a new file in `components/poster/styles/` implementing `PosterStyle`, listed in `index.ts`. The editor must not change.
 
 ## Accessibility rules
 
@@ -64,4 +65,4 @@ Commands: `npm run dev`, `npm run build`, `npm run lint`, `npm test`, `npx tsc -
 
 ## Milestones
 
-See the "Build milestones" table in SPEC.md. **Done:** milestone 1 (scaffold, tokens, types, data loading, schedule logic, basic Today page), milestone 2 (`components/Couplet.tsx` balancing, with the maths in `lib/balance.ts`) milestone 3 (`components/SherView.tsx` layers, `components/GlossSheet.tsx`, layer state in `lib/layers.ts`, word matching in `lib/gloss.ts`), milestone 4 (`/sher/[id]`, `/moments`, `/moments/[moment]`, tab bar, Share link, Yesterday/Tomorrow on Today) and milestone 5 (`/bayaz`, Save to bayaz in `components/SherActions.tsx`, logic in `lib/bayaz.ts`).
+See the "Build milestones" table in SPEC.md. **Done:** milestone 1 (scaffold, tokens, types, data loading, schedule logic, basic Today page), milestone 2 (`components/Couplet.tsx` balancing, with the maths in `lib/balance.ts`) milestone 3 (`components/SherView.tsx` layers, `components/GlossSheet.tsx`, layer state in `lib/layers.ts`, word matching in `lib/gloss.ts`), milestone 4 (`/sher/[id]`, `/moments`, `/moments/[moment]`, tab bar, Share link, Yesterday/Tomorrow on Today), milestone 5 (`/bayaz`, Save to bayaz in `components/SherActions.tsx`, logic in `lib/bayaz.ts`) and milestone 6 (poster maker at `/sher/[id]/poster`: editor in `components/poster/PosterMaker.tsx`, styles in `components/poster/styles/`, canvas helpers in `lib/poster/canvas.ts`).

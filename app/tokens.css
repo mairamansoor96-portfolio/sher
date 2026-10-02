@@ -37,6 +37,7 @@
   --spacing-couplet-pad: 2rem;    /* breathing room above/below couplets */
   --spacing-section: 3rem;
   --spacing-touch: 3rem;          /* 48px minimum touch target */
+  --spacing-tabbar: 4rem;         /* room kept clear above the bottom tab bar */
 
   /* Layout */
   --container-reading: 40rem;

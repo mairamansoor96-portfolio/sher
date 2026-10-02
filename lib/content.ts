@@ -4,7 +4,8 @@
 import shersJson from "@/data/shers.json";
 import poetsJson from "@/data/poets.json";
 import scheduleJson from "@/data/schedule.json";
-import type { Poet, Sher } from "./types";
+import { MOMENT_KEYS, MOMENTS } from "./moments";
+import type { Moment, Poet, Sher } from "./types";
 
 const allShers = shersJson as Sher[];
 const allPoets = poetsJson as Poet[];
@@ -28,6 +29,9 @@ function validate() {
       if (!s.lines.some((line) => line.includes(g.word))) {
         errors.push(`${s.id}: glossary word "${g.word}" not found in lines`);
       }
+    }
+    for (const m of s.moments) {
+      if (!MOMENT_KEYS.has(m)) errors.push(`${s.id}: unknown moment "${m}"`);
     }
     if (s.attribution === "disputed" && !s.attributionNote) {
       errors.push(`${s.id}: disputed attribution needs an attributionNote`);
@@ -55,3 +59,32 @@ const visibleIds = new Set(shers.map((s) => s.id));
 export const schedule: string[] = fullSchedule.filter((id) => visibleIds.has(id));
 
 export const poets: Poet[] = allPoets;
+
+export function getSher(id: string): Sher | undefined {
+  return shers.find((s) => s.id === id);
+}
+
+export function getPoet(key: string): Poet | undefined {
+  return poets.find((p) => p.key === key);
+}
+
+export function shersForMoment(moment: Moment): Sher[] {
+  return shers.filter((s) => s.moments.includes(moment));
+}
+
+/** Moments with at least one couplet; empty moments are hidden. */
+export const moments = MOMENTS.filter((m) => shersForMoment(m.key).length > 0);
+
+if (!SHOW_DRAFTS) {
+  for (const m of moments) {
+    const n = shersForMoment(m.key).length;
+    if (n < 3) console.warn(`[content] Moment "${m.key}" has ${n} couplet(s); launch needs at least 3.`);
+  }
+}
+
+/**
+ * A static export fails on a dynamic route with no pages, which is what
+ * production looks like before anything is verified. Routes then generate
+ * this one placeholder, which renders a 404.
+ */
+export const PLACEHOLDER_PARAM = "_none";

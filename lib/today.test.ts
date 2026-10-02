@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { dateKeyInZone, daysSince, scheduledId } from "./today.ts";
+import { addDays, dateKeyInZone, daysSince, scheduledId } from "./today.ts";
 
 const schedule = ["a", "b", "c", "d", "e"];
 
@@ -24,4 +24,10 @@ test("scheduledId is schedule[daysSinceLaunch % length]", () => {
   assert.equal(scheduledId(schedule, "2026-10-01", "2026-10-06"), "a");
   assert.equal(scheduledId(schedule, "2026-10-01", "2026-09-30"), "e");
   assert.equal(scheduledId([], "2026-10-01", "2026-10-01"), null);
+});
+
+test("addDays crosses month and year ends", () => {
+  assert.equal(addDays("2026-10-01", -1), "2026-09-30");
+  assert.equal(addDays("2026-12-31", 1), "2027-01-01");
+  assert.equal(addDays("2028-02-28", 1), "2028-02-29");
 });

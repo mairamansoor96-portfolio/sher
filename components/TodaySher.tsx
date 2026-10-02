@@ -1,8 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useSyncExternalStore } from "react";
+import { DraftNote } from "@/components/DraftNote";
+import { EmptyState } from "@/components/EmptyState";
 import { SherView } from "@/components/SherView";
-import { dateKeyInZone, scheduledId } from "@/lib/today";
+import { addDays, dateKeyInZone, scheduledId } from "@/lib/today";
 import type { Poet, Sher } from "@/lib/types";
 
 interface Props {
@@ -33,12 +36,12 @@ export function TodaySher({ shers, poets, schedule, launchDate, timeZone }: Prop
     () => null,
   );
 
-  if (schedule.length === 0) return <EmptyState />;
+  if (schedule.length === 0) return NOTHING_YET;
   if (todayKey === null) return <div className="min-h-64" aria-busy="true" />;
 
   const id = scheduledId(schedule, launchDate, todayKey);
   const sher = shers.find((s) => s.id === id);
-  if (!sher) return <EmptyState />;
+  if (!sher) return NOTHING_YET;
   const poet = poets.find((p) => p.key === sher.poet);
 
   const [y, m, d] = todayKey.split("-").map(Number);
@@ -56,23 +59,30 @@ export function TodaySher({ shers, poets, schedule, launchDate, timeZone }: Prop
         <time dateTime={todayKey}>{dateLabel}</time>
       </h2>
       <SherView sher={sher} poet={poet} />
-      {sher.status === "draft" && (
-        <p className="mt-section text-center text-ui-sm text-accent">
-          Draft — visible in development only
-        </p>
-      )}
+      <nav aria-label="Other days" className="mt-6 flex justify-center gap-6 text-ui-sm">
+        {(
+          [
+            ["Yesterday", -1],
+            ["Tomorrow", 1],
+          ] as const
+        ).map(([label, offset]) => (
+          <Link
+            key={label}
+            href={`/sher/${scheduledId(schedule, launchDate, addDays(todayKey, offset))}`}
+            className="inline-flex min-h-touch items-center px-2 text-ink-muted underline underline-offset-4"
+          >
+            {label}
+          </Link>
+        ))}
+      </nav>
+      <DraftNote sher={sher} />
     </article>
   );
 }
 
-function EmptyState() {
-  return (
-    <section className="py-section text-center">
-      <h2 className="text-ui-lg font-bold">The first couplet is on its way</h2>
-      <p className="mt-4 text-ink-muted">
-        Every couplet is checked against a printed edition before it appears here.
-        Please come back soon.
-      </p>
-    </section>
-  );
-}
+const NOTHING_YET = (
+  <EmptyState title="The first couplet is on its way">
+    Every couplet is checked against a printed edition before it appears here. Please come back
+    soon.
+  </EmptyState>
+);

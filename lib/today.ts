@@ -35,3 +35,9 @@ export function scheduledId(
   const n = daysSince(launchKey, todayKey);
   return schedule[((n % schedule.length) + schedule.length) % schedule.length];
 }
+
+/** The date key `n` days after `dateKey` (negative for before). */
+export function addDays(dateKey: string, n: number): string {
+  const [y, m, d] = dateKey.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d + n)).toISOString().slice(0, 10);
+}

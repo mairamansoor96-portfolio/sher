@@ -4,10 +4,8 @@ import { poets, schedule, shers } from "@/lib/content";
 
 export default function TodayPage() {
   return (
-    <main className="mx-auto max-w-reading px-gutter py-section">
-      <header className="mb-section">
-        <h1 className="text-ui-lg font-bold">Sher</h1>
-      </header>
+    <>
+      <h1 className="sr-only">Today</h1>
       <TodaySher
         shers={shers}
         poets={poets}
@@ -15,6 +13,6 @@ export default function TodayPage() {
         launchDate={LAUNCH_DATE}
         timeZone={TIME_ZONE}
       />
-    </main>
+    </>
   );
 }

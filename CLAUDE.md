@@ -27,9 +27,10 @@ accounts and no backend.
 - `components/TodaySher.tsx`: works out today's couplet **in the browser**, because the static HTML is built once and visited every day.
 - Dynamic routes use `generateStaticParams` with `dynamicParams = false`. A static export fails on an empty list, so when nothing is visible they generate `PLACEHOLDER_PARAM`, which renders a 404.
 
+- `lib/validate.ts`: every content rule (structure, copyright allowlist, Iqbal before 1929, verified needs an edition, schedule rules). Used by the build and by `npm run check:content`. **Adding or verifying couplets: follow `docs/CONTENT.md`** and start from `docs/sher.template.json`.
 - `lib/i18n.ts`: every interface string, in English and Urdu (typed, so a missing Urdu entry fails the type check). Client components use `useT()`; Server Components use `<T k="path.to.key" />` from `components/T.tsx`. Never hard-code interface text. Content from `data/` stays English and is marked `lang="en" dir="ltr"`. In Urdu mode `SiteHeader` sets `<html lang="ur" dir="rtl">` and the UI switches to Nastaliq.
 
-Commands: `npm run dev`, `npm run build`, `npm run lint`, `npm test`, `npx tsc --noEmit`, and `npm run check:a11y` (starts its own dev server, so stop any other `next dev` in this folder first; Next.js allows only one). Run `check:a11y` after any UI change.
+Commands: `npm run dev`, `npm run build`, `npm run lint`, `npm test`, `npx tsc --noEmit`, `npm run check:content` (content errors, warnings and launch readiness), and `npm run check:a11y` (starts its own dev server, so stop any other `next dev` in this folder first; Next.js allows only one). Run `check:a11y` after any UI change.
 
 ## Content rules (from SPEC.md)
 

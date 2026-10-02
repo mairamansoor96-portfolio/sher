@@ -4,7 +4,10 @@
 import shersJson from "@/data/shers.json";
 import poetsJson from "@/data/poets.json";
 import scheduleJson from "@/data/schedule.json";
-import { MOMENT_KEYS, MOMENTS } from "./moments";
+import { LAUNCH_DATE, TIME_ZONE } from "./config";
+import { MOMENTS } from "./moments";
+import { dateKeyInZone } from "./today";
+import { validate } from "./validate";
 import type { Moment, Poet, Sher } from "./types";
 
 const allShers = shersJson as Sher[];
@@ -14,37 +17,17 @@ const fullSchedule = scheduleJson as string[];
 /** Drafts are visible only in development; production shows verified only. */
 export const SHOW_DRAFTS = process.env.NODE_ENV === "development";
 
-function validate() {
-  const errors: string[] = [];
-  const poetKeys = new Set(allPoets.map((p) => p.key));
-  const ids = new Set<string>();
-
-  for (const s of allShers) {
-    if (ids.has(s.id)) errors.push(`${s.id}: duplicate id`);
-    ids.add(s.id);
-    if (!poetKeys.has(s.poet)) errors.push(`${s.id}: unknown poet "${s.poet}"`);
-    if (s.lines.length !== 2) errors.push(`${s.id}: lines must have exactly 2 misras`);
-    if (s.roman.length !== 2) errors.push(`${s.id}: roman must have exactly 2 lines`);
-    for (const g of s.glossary) {
-      if (!s.lines.some((line) => line.includes(g.word))) {
-        errors.push(`${s.id}: glossary word "${g.word}" not found in lines`);
-      }
-    }
-    for (const m of s.moments) {
-      if (!MOMENT_KEYS.has(m)) errors.push(`${s.id}: unknown moment "${m}"`);
-    }
-    if (s.attribution === "disputed" && !s.attributionNote) {
-      errors.push(`${s.id}: disputed attribution needs an attributionNote`);
-    }
-  }
-  for (const id of fullSchedule) {
-    if (!ids.has(id)) errors.push(`schedule: unknown sher id "${id}"`);
-  }
-  if (errors.length) {
-    throw new Error(`Invalid content in data/:\n  ${errors.join("\n  ")}`);
-  }
+const result = validate({
+  shers: allShers,
+  poets: allPoets,
+  schedule: fullSchedule,
+  // After launch, production must never shift past days.
+  launched: !SHOW_DRAFTS && dateKeyInZone(new Date(), TIME_ZONE) >= LAUNCH_DATE,
+});
+if (result.errors.length) {
+  throw new Error(`Invalid content in data/ (see docs/CONTENT.md):\n  ${result.errors.join("\n  ")}`);
 }
-validate();
+if (!SHOW_DRAFTS) result.warnings.forEach((w) => console.warn(`[content] ${w}`));
 
 export const shers: Sher[] = allShers.filter(
   (s) => SHOW_DRAFTS || s.status === "verified",
@@ -74,13 +57,6 @@ export function shersForMoment(moment: Moment): Sher[] {
 
 /** Moments with at least one couplet; empty moments are hidden. */
 export const moments = MOMENTS.filter((m) => shersForMoment(m.key).length > 0);
-
-if (!SHOW_DRAFTS) {
-  for (const m of moments) {
-    const n = shersForMoment(m.key).length;
-    if (n < 3) console.warn(`[content] Moment "${m.key}" has ${n} couplet(s); launch needs at least 3.`);
-  }
-}
 
 /**
  * A static export fails on a dynamic route with no pages, which is what

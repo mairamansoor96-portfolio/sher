@@ -1,0 +1,21 @@
+{
+  "id": "TODO-poet-first-words",
+  "poet": "TODO: key from data/poets.json, e.g. ghalib",
+  "lines": ["TODO: first misra, exactly as printed", "TODO: second misra, exactly as printed"],
+  "roman": ["TODO: first line in Roman Urdu", "TODO: second line in Roman Urdu"],
+  "meaningEn": "TODO: plain English meaning, our own words, 1-2 sentences",
+  "meaningUr": "TODO: optional simple Urdu paraphrase; delete this line if not written",
+  "whyItLands": "TODO: optional, 1-3 sentences on the image, wordplay or context; delete if not written",
+  "glossary": [
+    { "word": "TODO: copied from lines", "roman": "TODO", "meaning": "TODO: short, sense in this couplet first" }
+  ],
+  "moments": ["TODO: 1-3 moment keys"],
+  "source": {
+    "work": "TODO: e.g. Divan-e-Ghalib",
+    "edition": "TODO: editor, publisher, year of the printed edition checked against",
+    "page": "TODO: page number in that edition"
+  },
+  "attribution": "certain",
+  "attributionNote": "TODO: only if attribution is disputed; otherwise delete this line",
+  "status": "draft"
+}

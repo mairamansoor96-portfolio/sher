@@ -16,3 +16,41 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* A glossed word while the Words layer is on. Inline, with no padding or
+   border, so the balanced line keeps its measured width. */
+.gloss-word {
+  position: relative;
+  display: inline;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: underline dotted var(--color-accent);
+  text-decoration-thickness: var(--gloss-underline-thickness);
+  text-underline-offset: var(--gloss-underline-offset);
+  border-radius: var(--radius-sm);
+}
+/* Invisible 48px touch target that doesn't move the text. */
+.gloss-word::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: 100%;
+  min-width: var(--spacing-touch);
+  height: var(--spacing-touch);
+}
+.gloss-word:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Layers fade in; reduced motion makes this instant (rule above). */
+.reveal {
+  animation: reveal 150ms ease-out;
+}
+@keyframes reveal {
+  from {
+    opacity: 0;
+  }
+}

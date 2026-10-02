@@ -45,3 +45,9 @@
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
 }
+
+/* Tokens with no Tailwind namespace. */
+:root {
+  --gloss-underline-offset: 0.45em;
+  --gloss-underline-thickness: 0.06em;
+}

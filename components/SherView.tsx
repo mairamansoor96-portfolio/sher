@@ -1,0 +1,108 @@
+"use client";
+
+import { useState } from "react";
+import { Couplet } from "@/components/Couplet";
+import { GlossSheet } from "@/components/GlossSheet";
+import { setLayer, useLayers, type Layer } from "@/lib/layers";
+import type { Gloss, Poet, Sher } from "@/lib/types";
+
+interface Props {
+  sher: Sher;
+  poet?: Poet;
+}
+
+/**
+ * A couplet with its understanding layers: the poem, the poet, the layer
+ * toggles and whichever layers are on, then source and attribution, which
+ * always show. Used by Today and (milestone 4) couplet pages.
+ */
+export function SherView({ sher, poet }: Props) {
+  const layers = useLayers();
+  const [open, setOpen] = useState<{ gloss: Gloss; trigger: HTMLElement } | null>(null);
+
+  const controls: { layer: Layer; label: string; show: boolean }[] = [
+    { layer: "roman", label: "Roman", show: true },
+    { layer: "words", label: "Words", show: sher.glossary.length > 0 },
+    { layer: "meaning", label: "Meaning", show: true },
+    { layer: "why", label: "Why it lands", show: Boolean(sher.whyItLands) },
+  ];
+
+  const closeSheet = () => {
+    const trigger = open?.trigger;
+    setOpen(null);
+    trigger?.focus();
+  };
+
+  return (
+    <>
+      <Couplet
+        sher={sher}
+        roman={layers.roman}
+        onGloss={layers.words ? (gloss, trigger) => setOpen({ gloss, trigger }) : undefined}
+      />
+
+      {poet && (
+        <p className="text-center">
+          <span lang="ur" dir="rtl" className="block font-urdu text-poet-ur leading-nastaliq">
+            {poet.nameUr}
+          </span>
+          <span className="block text-ui text-ink-muted">{poet.nameEn}</span>
+        </p>
+      )}
+
+      <div
+        role="group"
+        aria-label="Understanding layers"
+        className="mt-section flex flex-wrap justify-center gap-2"
+      >
+        {controls
+          .filter((c) => c.show)
+          .map(({ layer, label }) => (
+            <button
+              key={layer}
+              type="button"
+              aria-pressed={layers[layer]}
+              onClick={() => setLayer(layer, !layers[layer])}
+              className="min-h-touch rounded-md border border-ink px-4 text-ui aria-pressed:bg-ink aria-pressed:text-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            >
+              {label}
+            </button>
+          ))}
+      </div>
+
+      {layers.meaning && (
+        <section aria-label="Meaning" className="reveal mt-section">
+          <h3 className="text-ui-sm font-bold text-ink-muted">Meaning</h3>
+          <p className="mt-1 text-ui-lg">{sher.meaningEn}</p>
+          {sher.meaningUr && (
+            <p lang="ur" dir="rtl" className="mt-2 font-urdu text-poet-ur leading-nastaliq">
+              {sher.meaningUr}
+            </p>
+          )}
+        </section>
+      )}
+
+      {layers.why && sher.whyItLands && (
+        <section aria-label="Why it lands" className="reveal mt-section">
+          <h3 className="text-ui-sm font-bold text-ink-muted">Why it lands</h3>
+          <p className="mt-1">{sher.whyItLands}</p>
+        </section>
+      )}
+
+      <footer className="mt-section border-t border-rule pt-4 text-ui-sm text-ink-muted">
+        <p>
+          Source: <cite>{sher.source.work}</cite>
+          {sher.source.edition && `, ${sher.source.edition}`}
+          {sher.source.page && `, p. ${sher.source.page}`}
+        </p>
+        {sher.attribution === "disputed" && (
+          <p className="mt-1">
+            <strong className="text-ink">Disputed attribution.</strong> {sher.attributionNote}
+          </p>
+        )}
+      </footer>
+
+      {open && <GlossSheet gloss={open.gloss} onClose={closeSheet} />}
+    </>
+  );
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { Couplet } from "@/components/Couplet";
+import { SherView } from "@/components/SherView";
 import { dateKeyInZone, scheduledId } from "@/lib/today";
 import type { Poet, Sher } from "@/lib/types";
 
@@ -55,15 +55,7 @@ export function TodaySher({ shers, poets, schedule, launchDate, timeZone }: Prop
         <span className="sr-only">Today’s couplet, </span>
         <time dateTime={todayKey}>{dateLabel}</time>
       </h2>
-      <Couplet sher={sher} />
-      {poet && (
-        <p className="text-center">
-          <span lang="ur" dir="rtl" className="block font-urdu text-poet-ur leading-nastaliq">
-            {poet.nameUr}
-          </span>
-          <span className="block text-ui text-ink-muted">{poet.nameEn}</span>
-        </p>
-      )}
+      <SherView sher={sher} poet={poet} />
       {sher.status === "draft" && (
         <p className="mt-section text-center text-ui-sm text-accent">
           Draft — visible in development only

@@ -2,7 +2,8 @@
 
 import { useLayoutEffect, useRef, useState } from "react";
 import { balance, type Balance } from "@/lib/balance";
-import type { Sher } from "@/lib/types";
+import { segmentLine } from "@/lib/gloss";
+import type { Gloss, Sher } from "@/lib/types";
 
 const SIZE_TOKEN = {
   today: "--text-couplet",
@@ -12,6 +13,10 @@ const SIZE_TOKEN = {
 interface Props {
   sher: Sher;
   size?: keyof typeof SIZE_TOKEN;
+  /** Show each Roman line under its Urdu line. */
+  roman?: boolean;
+  /** When set, glossed words become buttons that call this. */
+  onGloss?: (gloss: Gloss, trigger: HTMLElement) => void;
 }
 
 /**
@@ -22,8 +27,11 @@ interface Props {
  * - the shorter line is stretched by widening word spaces only (justify),
  *   unless that needs more than 40% extra, when it stays natural and centred.
  * Never use letter-spacing here, and never overflow: hidden — it clips Nastaliq.
+ *
+ * Roman lines are placed visually under their Urdu line with grid rows, but
+ * come after both Urdu lines in the DOM, so screen readers meet the Urdu first.
  */
-export function Couplet({ sher, size = "today" }: Props) {
+export function Couplet({ sher, size = "today", roman = false, onGloss }: Props) {
   const boxRef = useRef<HTMLDivElement>(null);
   const measure0 = useRef<HTMLSpanElement>(null);
   const measure1 = useRef<HTMLSpanElement>(null);
@@ -74,15 +82,29 @@ export function Couplet({ sher, size = "today" }: Props) {
       <div
         lang="ur"
         dir="rtl"
-        className="mx-auto font-urdu leading-nastaliq"
+        className="mx-auto grid font-urdu leading-nastaliq"
         style={{
           fontSize: layout ? `calc(${baseSize} * ${layout.scale})` : baseSize,
           width: layout ? `${Math.ceil(layout.width) + 1}px` : undefined,
           maxWidth: "100%",
         }}
       >
-        <p className={lineClass}>{sher.lines[0]}</p>
-        <p className={lineClass}>{sher.lines[1]}</p>
+        {sher.lines.map((line, i) => (
+          <p key={i} className={`${lineClass} ${URDU_ROW[i]}`}>
+            {onGloss ? <GlossedLine line={line} sher={sher} onGloss={onGloss} /> : line}
+          </p>
+        ))}
+        {roman &&
+          sher.roman.map((line, i) => (
+            <p
+              key={i}
+              lang="ur-Latn"
+              dir="ltr"
+              className={`${ROMAN_ROW[i]} pb-2 text-left font-ui text-ui leading-ui text-ink-muted`}
+            >
+              {line}
+            </p>
+          ))}
       </div>
 
       {/* Hidden measuring copy: natural widths at the base size. */}
@@ -97,5 +119,34 @@ export function Couplet({ sher, size = "today" }: Props) {
         <span ref={measure1} className="block w-max">{sher.lines[1]}</span>
       </div>
     </div>
+  );
+}
+
+const URDU_ROW = ["row-start-1", "row-start-3"];
+const ROMAN_ROW = ["row-start-2", "row-start-4"];
+
+function GlossedLine({
+  line,
+  sher,
+  onGloss,
+}: {
+  line: string;
+  sher: Sher;
+  onGloss: NonNullable<Props["onGloss"]>;
+}) {
+  return segmentLine(line, sher.glossary).map((seg, i) =>
+    seg.gloss ? (
+      <button
+        key={i}
+        type="button"
+        aria-haspopup="dialog"
+        className="gloss-word"
+        onClick={(e) => onGloss(seg.gloss!, e.currentTarget)}
+      >
+        {seg.text}
+      </button>
+    ) : (
+      seg.text
+    ),
   );
 }

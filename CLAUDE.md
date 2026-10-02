@@ -62,4 +62,4 @@ Commands: `npm run dev`, `npm run build`, `npm run lint`, `npm test`, `npx tsc -
 
 ## Milestones
 
-See the "Build milestones" table in SPEC.md. **Done:** milestone 1 (scaffold, tokens, types, data loading, schedule logic, basic Today page) and milestone 2 (`components/Couplet.tsx` balancing, with the maths in `lib/balance.ts`).
+See the "Build milestones" table in SPEC.md. **Done:** milestone 1 (scaffold, tokens, types, data loading, schedule logic, basic Today page), milestone 2 (`components/Couplet.tsx` balancing, with the maths in `lib/balance.ts`) and milestone 3 (`components/SherView.tsx` layers, `components/GlossSheet.tsx`, layer state in `lib/layers.ts`, word matching in `lib/gloss.ts`).

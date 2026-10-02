@@ -7,7 +7,7 @@
  * --text-couplet -> text-couplet, --leading-nastaliq -> leading-nastaliq.
  * Sizes are in rem so they scale with the reader's text size.
  */
-@theme {
+@theme static {
   /* Palette: near-white background, near-black ink, one muted accent. */
   --color-paper: #fafaf8;
   --color-ink: #1c1c1a;

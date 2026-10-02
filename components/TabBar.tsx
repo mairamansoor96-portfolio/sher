@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-// Bayaz joins in milestone 5.
 const TABS = [
   { href: "/", label: "Today" },
   { href: "/moments", label: "Moments" },
+  { href: "/bayaz", label: "Bayaz" },
 ];
 
 export function TabBar() {

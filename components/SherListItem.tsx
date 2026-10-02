@@ -3,8 +3,15 @@ import { Couplet } from "@/components/Couplet";
 import { firstSentence } from "@/lib/moments";
 import type { Poet, Sher } from "@/lib/types";
 
+interface Props {
+  sher: Sher;
+  poet?: Poet;
+  /** Extra controls shown under the card, outside its link. */
+  children?: React.ReactNode;
+}
+
 /** A couplet in a list: Urdu, Roman and a one-line meaning, linking to its page. */
-export function SherListItem({ sher, poet }: { sher: Sher; poet?: Poet }) {
+export function SherListItem({ sher, poet, children }: Props) {
   return (
     <li>
       <Link
@@ -15,6 +22,7 @@ export function SherListItem({ sher, poet }: { sher: Sher; poet?: Poet }) {
         <p className="text-ui">{firstSentence(sher.meaningEn)}</p>
         {poet && <p className="mt-1 text-ui-sm text-ink-muted">{poet.nameEn}</p>}
       </Link>
+      {children}
     </li>
   );
 }

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Couplet } from "@/components/Couplet";
 import { GlossSheet } from "@/components/GlossSheet";
-import { ShareLink } from "@/components/ShareLink";
+import { SherActions } from "@/components/SherActions";
 import { setLayer, useLayers, type Layer } from "@/lib/layers";
 import type { Gloss, Poet, Sher } from "@/lib/types";
 
@@ -91,7 +91,7 @@ export function SherView({ sher, poet }: Props) {
       )}
 
       <div className="mt-section">
-        <ShareLink id={sher.id} title={`${sher.roman[0]}${poet ? ` — ${poet.nameEn}` : ""}`} />
+        <SherActions id={sher.id} title={`${sher.roman[0]}${poet ? ` — ${poet.nameEn}` : ""}`} />
       </div>
 
       <footer className="mt-section border-t border-rule pt-4 text-ui-sm text-ink-muted">

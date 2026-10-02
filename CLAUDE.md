@@ -23,6 +23,7 @@ accounts and no backend.
 - `lib/content.ts`: loads `data/*.json` at build time, validates them (the build fails on bad content) and filters out drafts in production. Import it only from Server Components.
 - `lib/config.ts`: `TIME_ZONE` (Asia/Karachi) and `LAUNCH_DATE`. **Never change `LAUNCH_DATE` after launch.**
 - `lib/today.ts`: pure date and schedule logic, tested in `lib/today.test.ts`.
+- `lib/storage.ts`: `createStore` for anything kept in `localStorage` (layers, bayaz). It wraps every access in try/catch and falls back to memory. Use it for any new per-device state.
 - `components/TodaySher.tsx`: works out today's couplet **in the browser**, because the static HTML is built once and visited every day.
 - Dynamic routes use `generateStaticParams` with `dynamicParams = false`. A static export fails on an empty list, so when nothing is visible they generate `PLACEHOLDER_PARAM`, which renders a 404.
 
@@ -63,4 +64,4 @@ Commands: `npm run dev`, `npm run build`, `npm run lint`, `npm test`, `npx tsc -
 
 ## Milestones
 
-See the "Build milestones" table in SPEC.md. **Done:** milestone 1 (scaffold, tokens, types, data loading, schedule logic, basic Today page), milestone 2 (`components/Couplet.tsx` balancing, with the maths in `lib/balance.ts`) milestone 3 (`components/SherView.tsx` layers, `components/GlossSheet.tsx`, layer state in `lib/layers.ts`, word matching in `lib/gloss.ts`) and milestone 4 (`/sher/[id]`, `/moments`, `/moments/[moment]`, tab bar, Share link, Yesterday/Tomorrow on Today).
+See the "Build milestones" table in SPEC.md. **Done:** milestone 1 (scaffold, tokens, types, data loading, schedule logic, basic Today page), milestone 2 (`components/Couplet.tsx` balancing, with the maths in `lib/balance.ts`) milestone 3 (`components/SherView.tsx` layers, `components/GlossSheet.tsx`, layer state in `lib/layers.ts`, word matching in `lib/gloss.ts`), milestone 4 (`/sher/[id]`, `/moments`, `/moments/[moment]`, tab bar, Share link, Yesterday/Tomorrow on Today) and milestone 5 (`/bayaz`, Save to bayaz in `components/SherActions.tsx`, logic in `lib/bayaz.ts`).
